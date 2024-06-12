@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ping Pong Game</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 4px;
+            padding: 4px;
+            background-color: #f0f0f0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            height: 100vh;
+            text-align: center;
+        }
+
+        canvas {
+            border: 1px solid #333;
+        }
+
+        button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-size: 20px;
+            background-color: orange;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: darkorange;
+        }
+
+        .instructions-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            max-width: 1000px;
+            margin-bottom: 20px;
+        }
+
+        .instructions {
+            width: 200px;
+        }
+
+        .instructions p {
+            font-size: 16px;
+            margin: 5px 0;
+        }
+
+        .instructions h2 {
+            margin: 10px 0;
+        }
+
+        .player-blue {
+            color: blue;
+        }
+
+        .player-red {
+            color: red;
+        }
+
+        .game-info {
+            margin-bottom: 20px;
+        }
+
+        .game-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+    </style>
+</head>
+<body>
+
+<div class="game-info">
+    <p>First to 10 points wins! Get ready for an exciting match!</p>
+</div>
+
+<div class="instructions-container">
+    <div class="instructions player-blue">
+        <h2>Player Blue</h2>
+        <p>Use the <strong>'W'</strong> key to move up.</p>
+        <p>Use the <strong>'S'</strong> key to move down.</p>
+    </div>
+    <div class="game-container">
+        <canvas id="gameCanvas" width="800" height="600"></canvas>
+        <button onclick="homePage()">Home</button>
+    </div>
+    <div class="instructions player-red">
+        <h2>Player Red</h2>
+        <p>Use the <strong>Up Arrow</strong> key to move up.</p>
+        <p>Use the <strong>Down Arrow</strong> key to move down.</p>
+    </div>
+</div>
+
+<script>
+    function homePage() {
+        window.location.href = "index.html";
+    }
+</script>
+
+<script src="js/pingpong.js"></script>
+
+</body>
+</html>
