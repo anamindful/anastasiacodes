@@ -1,4 +1,4 @@
-class DreamTracker {
+class PomoTimer {
     constructor({ selector, targetDate }) {
         this.selector = document.querySelector(selector);
         this.targetDate = targetDate;
@@ -36,7 +36,7 @@ class DreamTracker {
 }
 
 document.getElementById('startButton').addEventListener('click', () => {
-    const timer1 = new DreamTracker({
+    const timer1 = new PomoTimer({
         selector: '#clock',
         targetDate: new Date(Date.parse(new Date()) + 25 * 60 * 1000)
     });
