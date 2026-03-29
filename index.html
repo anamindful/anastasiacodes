@@ -3,135 +3,395 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Anastasia's Portfolio</title>
+    <title>Anastasia - Portfolio</title>
     <style>
 
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #000000;
-            text-align: center;
-        }
+    :root {
+      --bg: #0f0f1a;
+      --bg-card: #16162a;
+      --bg-card-alt: #1c1c32;
+      --accent: #c084b0;
+      --accent-dim: rgba(192, 132, 176, 0.15);
+      --accent-border: rgba(192, 132, 176, 0.3);
+      --text-primary: #f0ece8;
+      --text-secondary: #a89fb5;
+      --text-muted: #6a6070;
+      --border: rgba(192, 132, 176, 0.12);
+    }
 
-        h1 {
-            margin: 10px auto;
-            padding: 20px;
-            color: #000000;
-        }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
 
-        p {
-        color: #000000;
-        }
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background-color: var(--bg);
+      color: var(--text-primary);
+      min-height: 100vh;
+      padding: 0 20px;
+    }
 
-        .container {
-            max-width: 600px;
-            margin: 30px auto;
-            padding: 20px;
-            border: 2px solid #ccc;
-            border-radius: 10px;
-            background-color: whitesmoke;
-        }
+    /* NAV */
+    nav {
+      max-width: 760px;
+      margin: 0 auto;
+      padding: 28px 0 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 0.5px solid var(--border);
+      padding-bottom: 20px;
+    }
 
-        .container2 {
-            max-width: 310px;
-            margin: 20px auto;
-            padding: 10px;
-            border-radius: 5px;
-            background-color: #2d4b68;
-        }
+    .nav-logo {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 20px;
+      font-weight: 300;
+      color: var(--accent);
+      letter-spacing: 0.04em;
+    }
 
-        .container3 {
-            max-width: 310px;
-            margin: 20px auto;
-            padding: 10px;
-            border-radius: 5px;
-            background-color: #aa6047;
-        }
+    .nav-links {
+      display: flex;
+      gap: 28px;
+      list-style: none;
+    }
 
+    .nav-links a {
+      font-size: 13px;
+      color: var(--text-secondary);
+      text-decoration: none;
+      letter-spacing: 0.06em;
+      transition: color 0.2s;
+    }
 
+    .nav-links a:hover { color: var(--accent); }
 
-        .circle-link {
-            display: inline-block;
-            width: 100px;
-            height: 100px;
-            background-color: whitesmoke;
-            color: rgb(73, 129, 140);
-            border-radius: 50%;
-            text-decoration: none;
-            line-height: 100px;
-            font-size: 16px;
-            padding: 20px;
-            margin: 20px;
-        }
+    /* HERO */
+    .hero {
+      max-width: 760px;
+      margin: 0 auto;
+      padding: 72px 0 56px;
+      border-bottom: 0.5px solid var(--border);
+    }
 
-    </style>
+    .hero-eyebrow {
+      font-size: 11px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 20px;
+      opacity: 0;
+      animation: fadeUp 0.6s ease forwards;
+    }
+
+    .hero-name {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(44px, 8vw, 72px);
+      font-weight: 300;
+      line-height: 1.1;
+      color: var(--text-primary);
+      margin-bottom: 24px;
+      opacity: 0;
+      animation: fadeUp 0.6s ease 0.1s forwards;
+    }
+
+    .hero-tagline {
+      font-size: 16px;
+      line-height: 1.8;
+      color: var(--text-secondary);
+      max-width: 520px;
+      margin-bottom: 32px;
+      font-weight: 300;
+      opacity: 0;
+      animation: fadeUp 0.6s ease 0.2s forwards;
+    }
+
+    .hero-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 36px;
+      opacity: 0;
+      animation: fadeUp 0.6s ease 0.3s forwards;
+    }
+
+    .tag {
+      font-size: 11px;
+      padding: 5px 14px;
+      border-radius: 20px;
+      border: 0.5px solid var(--accent-border);
+      color: var(--accent);
+      letter-spacing: 0.04em;
+    }
+
+    .hero-links {
+      display: flex;
+      gap: 12px;
+      opacity: 0;
+      animation: fadeUp 0.6s ease 0.4s forwards;
+    }
+
+    .btn {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 13px;
+      padding: 10px 22px;
+      border-radius: 8px;
+      border: 0.5px solid var(--accent-border);
+      color: var(--accent);
+      background: var(--accent-dim);
+      text-decoration: none;
+      cursor: pointer;
+      transition: background 0.2s, border-color 0.2s;
+      letter-spacing: 0.04em;
+    }
+
+    .btn:hover {
+      background: rgba(192, 132, 176, 0.25);
+      border-color: var(--accent);
+    }
+
+    /* SECTIONS */
+    section {
+      max-width: 760px;
+      margin: 0 auto;
+      padding: 56px 0;
+      border-bottom: 0.5px solid var(--border);
+    }
+
+    .section-label {
+      font-size: 11px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 28px;
+    }
+
+    /* ABOUT */
+    .about-text {
+      font-size: 16px;
+      line-height: 1.9;
+      color: var(--text-secondary);
+      font-weight: 300;
+    }
+
+    /* PROJECTS */
+    .projects-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .project-card {
+      background: var(--bg-card);
+      border-radius: 12px;
+      padding: 28px;
+      border: 0.5px solid var(--border);
+      transition: border-color 0.2s, background 0.2s;
+    }
+
+    .project-card:hover {
+      border-color: var(--accent-border);
+      background: var(--bg-card-alt);
+    }
+
+    .project-card.featured {
+      grid-column: 1 / -1;
+      border-color: rgba(192, 132, 176, 0.25);
+      background: var(--bg-card-alt);
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 24px;
+      align-items: start;
+    }
+
+    .project-card.featured:hover {
+      border-color: var(--accent);
+    }
+
+    .featured-badge {
+      font-size: 10px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--accent);
+      background: var(--accent-dim);
+      border: 0.5px solid var(--accent-border);
+      padding: 4px 10px;
+      border-radius: 20px;
+      white-space: nowrap;
+      align-self: start;
+    }
+
+    .project-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 24px;
+      font-weight: 300;
+      color: var(--text-primary);
+      margin-bottom: 10px;
+    }
+
+    .project-desc {
+      font-size: 14px;
+      color: var(--text-secondary);
+      line-height: 1.7;
+      margin-bottom: 16px;
+      font-weight: 300;
+    }
+
+    .project-stack {
+      font-size: 11px;
+      color: var(--text-muted);
+      letter-spacing: 0.04em;
+      margin-bottom: 14px;
+    }
+
+    .project-link {
+      font-size: 12px;
+      color: var(--accent);
+      text-decoration: none;
+      letter-spacing: 0.04em;
+      transition: opacity 0.2s;
+    }
+
+    .project-link:hover { opacity: 0.7; }
+
+    .project-img {
+      width: 100%;
+      border-radius: 8px;
+      margin-top: 16px;
+      opacity: 0.85;
+    }
+
+    /* FOOTER */
+    footer {
+      max-width: 760px;
+      margin: 0 auto;
+      padding: 36px 0 48px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .footer-name {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 16px;
+      font-weight: 300;
+      color: var(--text-muted);
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 20px;
+    }
+
+    .footer-links a {
+      font-size: 12px;
+      color: var(--text-muted);
+      text-decoration: none;
+      letter-spacing: 0.06em;
+      transition: color 0.2s;
+    }
+
+    .footer-links a:hover { color: var(--accent); }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(16px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (max-width: 560px) {
+      .projects-grid { grid-template-columns: 1fr; }
+      .project-card.featured { grid-template-columns: 1fr; }
+      .hero-name { font-size: 42px; }
+      footer { flex-direction: column; gap: 16px; text-align: center; }
+    }
+  </style>
 </head>
 <body>
 
-<div class="container">
-    <h1>Anastasia's Portfolio</h1>
-    <p>Welcome to version 2.0 of my portfolio!</p>
-    
-    <p>I'm a developer who never stopped being a human first.
-    I build websites, wellness brands, and creative projects rooted in real life. I believe the best technology serves people, not the other way around.
+  <nav>
+    <div class="nav-logo">anastasia collins</div>
+    <ul class="nav-links">
+      <li><a href="#about">About</a></li>
+      <li><a href="#projects">Projects</a></li>
+      <li><a href="https://github.com/anamindful" target="_blank">GitHub</a></li>
+      <li><a href="https://www.linkedin.com/in/anastasiacollins/" target="_blank">LinkedIn</a></li>
+    </ul>
+  </nav>
 
- Skilled in JavaScript, Java, HTML/CSS, MySQL, with a background in wellness coaching, brand building, and creative design.</p>
-
-<h1>About Anastasia</h1>
-
-<p>I spent many years as a certified personal trainer before teaching myself to code. 
-    I went through a bootcamp and discovered that technical skills and people skills aren't as different as everyone thinks — both are about solving real problems for real humans. Now I build websites and brands that live at the intersection of both worlds. The100Method is my own wellness brand — a philosophy rooted in Pilates, breath, and the belief that your goals are worth going after — designed and developed by me from the ground up. I'm drawn to work that means something, whether that's in wellness, tech, or anywhere the two meet.</p>
-</div>
-
-<a href="https://github.com/anamindful" target="_blank" class="circle-link">GitHub</a>
-
-<a href="https://www.linkedin.com/in/anastasiacollins/" target="_blank" class="circle-link">LinkedIn</a>
-
-      
-<div class="container">
-    <p><strong>Current Projects</strong></p>
-
-    <div class="container3">
-        <h2>Cardio by Zone</h2>
-        <p>Heart Rate Calculator</p>
-        <p>A heart rate calculator that helps users train smarter by identifying their personal cardio zones. 
-            Built with JavaScript, HTML & CSS.</p>
-        <a href="cardio.html" target="_blank" class="circle-link">Heart Rate</a>
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-eyebrow">Web developer · Wellness · Creative</div>
+    <h1 class="hero-name">Anastasia</h1>
+    <p class="hero-tagline">I'm a developer who never stopped being a human first. I build websites, wellness brands, and creative projects rooted in real life — because the best technology serves people, not the other way around.</p>
+    <div class="hero-tags">
+      <span class="tag">JavaScript</span>
+      <span class="tag">Java</span>
+      <span class="tag">HTML & CSS</span>
+      <span class="tag">MySQL</span>
+      <span class="tag">Wellness Coaching</span>
+      <span class="tag">Brand Design</span>
     </div>
-
-    <div class="container3">
-        <h2>Pomodoro Timer</h2>
-        <p>A clean focus timer built on the Pomodoro technique — 25 minutes of intention at a time. 
-            JavaScript, HTML & CSS.</p>
-        <a href="timer.html" target="_blank" class="circle-link">25 Minutes</a>
+    <div class="hero-links">
+      <a href="https://github.com/anamindful" target="_blank" class="btn">GitHub</a>
+      <a href="https://www.linkedin.com/in/anastasiacollins/" target="_blank" class="btn">LinkedIn</a>
     </div>
+  </div>
 
-    <div class="container2">
-        <h2>Launch Code Project</h2>
-        <p>A full-stack travel planning application built with Java, MySQL, Thymeleaf, and a third-party API.</p>
-    <img src="/travel.png" alt="Travel Up App" width="304" height="240">
+  <!-- ABOUT -->
+  <section id="about">
+    <div class="section-label">About</div>
+    <p class="about-text">As a certified personal trainer and coach, my work has always been client-centered — meeting people where they are and helping them move forward. That same philosophy is what led me to code. I discovered that technical skills and people skills aren't as different as everyone thinks — both are about solving real problems for real humans. Now I build websites and brands that live with heart. The100Method is my own wellness brand — a philosophy rooted in Pilates, breath, and the belief that your goals are worth going after — designed and developed by me from the ground up. I'm drawn to work that means something, whether that's in wellness, tech, or anywhere the two meet.</p>
+  </section>
+
+  <!-- PROJECTS -->
+  <section id="projects">
+    <div class="section-label">Projects</div>
+    <div class="projects-grid">
+
+      <!-- Featured -->
+      <div class="project-card featured">
+        <div>
+          <p class="project-stack">Brand Design · Web Development · Wellness Coaching</p>
+          <h2 class="project-title">The100Method</h2>
+          <p class="project-desc">The100Method was born during Pilates teacher training — a philosophy about staying grounded while going after your goals. In Pilates, the Hundred is a foundational exercise: 100 beats of the arms, breathing in and breathing out, a reminder to move with intention and connect breath to your core.<br><br>Breathe in, breathe out. Move through your day knowing that every choice flows from your core values and beliefs. And when things don't go as planned — dig deeper. Understand how your beliefs may need to shift to carry you to the next level.<br><br><em style="color: var(--accent); font-family: 'Cormorant Garamond', serif; font-size: 16px;">#youareenough</em></p>
+          <img src="/logo.png" alt="The100Method Logo" class="project-img" style="max-width: 180px;">
+        </div>
+        <span class="featured-badge">Featured project</span>
+      </div>
+
+      <!-- Cardio -->
+      <div class="project-card">
+        <p class="project-stack">JavaScript · HTML & CSS</p>
+        <h2 class="project-title">Cardio by Zone</h2>
+        <p class="project-desc">A heart rate calculator that helps users train smarter by identifying their personal cardio zones.</p>
+        <a href="cardio.html" target="_blank" class="project-link">Try it →</a>
+      </div>
+
+      <!-- Pomodoro -->
+      <div class="project-card">
+        <p class="project-stack">JavaScript · HTML & CSS</p>
+        <h2 class="project-title">Pomodoro Timer</h2>
+        <p class="project-desc">A clean focus timer built on the Pomodoro technique — 25 minutes of intention at a time.</p>
+        <a href="timer.html" target="_blank" class="project-link">Try it →</a>
+      </div>
+
+      <!-- Travel App -->
+      <div class="project-card" style="grid-column: 1 / -1;">
+        <p class="project-stack">Java · MySQL · Thymeleaf · API</p>
+        <h2 class="project-title">Launch Code Travel App</h2>
+        <p class="project-desc">A full-stack travel planning application built with Java, MySQL, Thymeleaf, and a third-party API. This project was built with a team of likeminded learners while attending LaunchCode Web Dev Bootcamp.</p>
+        <img src="/travel.png" alt="Travel Up App" class="project-img">
+      </div>
+
     </div>
+  </section>
 
-    <div class="container3">
-        <h2>The100Method</h2>
-        <p>
-The100Method was born during Pilates teacher training. The name has many meanings, but at its core, a philosophy about staying grounded while going after your goals.
-In Pilates, the Hundred is a foundational exercise, 100 beats of the arms, breathing in and breathing out, a reminder to move with intention and connect breath to your core. That principle is the foundation of everything The100Method stands for.
-Breathe in, breathe out. Move through your day knowing that every choice flows from your core values and beliefs. And when things don't go as planned, dig deeper. Understand how your beliefs may need to shift to carry you to the next level.
-#youareenough
-
-Brand Design · Web Development · Wellness Coaching</p>
-    <img src="/logo.png" alt="The100Method Logo" width="300" height="300">
+  <footer>
+    <div class="footer-name">anastasia collins</div>
+    <div class="footer-links">
+      <a href="https://github.com/anamindful" target="_blank">GitHub</a>
+      <a href="https://www.linkedin.com/in/anastasiacollins/" target="_blank">LinkedIn</a>
     </div>
-
-    <div class="container2">
-        <h2>Let's Play Ping Pong!</h2>
-        <p>JavaScript, HTML & CSS</p>
-        <a href="game.html" target="_blank" class="circle-link">Play Now</a>
-    </div>
-    
-</div>
+  </footer>
 
 </body>
 </html>
