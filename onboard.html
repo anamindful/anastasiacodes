@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Riff — Get started</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css" />
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    .onboard-wrap {
+      min-height: 100vh; display: flex; align-items: center; justify-content: center;
+      padding: 24px;
+    }
+
+    .onboard-card {
+      background: var(--bg2); border: 0.5px solid var(--border);
+      border-radius: 28px; padding: 40px 36px;
+      width: 100%; max-width: 400px;
+      position: relative;
+    }
+
+    .onboard-logo {
+      font-family: 'DM Serif Display', serif; font-size: 26px; color: var(--text);
+      margin-bottom: 8px; display: block;
+    }
+
+    .onboard-step-label {
+      font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase;
+      color: var(--text3); font-weight: 500; margin-bottom: 28px;
+    }
+
+    .onboard-title {
+      font-family: 'DM Serif Display', serif; font-size: 26px; color: var(--text);
+      line-height: 1.15; margin-bottom: 8px;
+    }
+
+    .onboard-sub {
+      font-size: 13px; color: var(--text2); line-height: 1.6; font-weight: 300;
+      margin-bottom: 28px;
+    }
+
+    .step-dots {
+      display: flex; gap: 6px; margin-bottom: 32px;
+    }
+
+    .step-dot {
+      height: 3px; border-radius: 2px; background: var(--border);
+      transition: background 0.3s, width 0.3s;
+      width: 24px;
+    }
+    .step-dot.active { background: var(--accent); width: 36px; }
+    .step-dot.done { background: var(--accent); opacity: 0.4; }
+
+    .field-label {
+      font-size: 11px; letter-spacing: 0.8px; text-transform: uppercase;
+      color: var(--text3); font-weight: 500; margin-bottom: 8px;
+    }
+
+    .field-input {
+      width: 100%; padding: 12px 16px;
+      background: var(--bg); border: 0.5px solid var(--border2);
+      border-radius: 12px; color: var(--text);
+      font-family: 'DM Sans', sans-serif; font-size: 14px;
+      outline: none; margin-bottom: 16px;
+      transition: border-color 0.2s;
+      box-sizing: border-box;
+    }
+    .field-input:focus { border-color: var(--accent); }
+    .field-input::placeholder { color: var(--text3); }
+
+    .field-hint {
+      font-size: 11px; color: var(--text3); margin-top: -10px;
+      margin-bottom: 20px; font-style: italic;
+    }
+
+    .btn-full {
+      width: 100%; padding: 13px;
+      background: var(--accent); color: #0a0a0a;
+      border: none; border-radius: 100px;
+      font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 500;
+      cursor: pointer; transition: opacity 0.2s;
+      margin-top: 4px;
+    }
+    .btn-full:hover { opacity: 0.88; }
+
+    .btn-full.secondary {
+      background: transparent; color: var(--text);
+      border: 0.5px solid var(--border2); margin-top: 10px;
+    }
+    .btn-full.secondary:hover { background: var(--pill); }
+
+    .spotify-btn {
+      width: 100%; padding: 13px;
+      background: #1DB954; color: #000;
+      border: none; border-radius: 100px;
+      font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 500;
+      cursor: pointer; transition: opacity 0.2s;
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+    }
+    .spotify-btn:hover { opacity: 0.88; }
+
+    .back-btn {
+      position: absolute; top: 28px; right: 28px;
+      background: none; border: none; color: var(--text3);
+      cursor: pointer; font-size: 20px; padding: 4px;
+      transition: color 0.2s;
+    }
+    .back-btn:hover { color: var(--text); }
+
+    .step { display: none; }
+    .step.active { display: block; }
+
+    .or-divider {
+      display: flex; align-items: center; gap: 12px;
+      margin: 16px 0; color: var(--text3); font-size: 12px;
+    }
+    .or-divider::before, .or-divider::after {
+      content: ''; flex: 1; height: 0.5px; background: var(--border);
+    }
+
+    .skip-link {
+      text-align: center; margin-top: 14px;
+      font-size: 12px; color: var(--text3);
+    }
+    .skip-link a {
+      color: var(--text2); text-decoration: none; cursor: pointer;
+    }
+    .skip-link a:hover { color: var(--text); }
+
+    .mode-toggle-corner {
+      position: fixed; top: 20px; right: 20px;
+    }
+  </style>
+</head>
+<body>
+<div class="riff-root" id="root">
+
+  <div class="mode-toggle-corner">
+    <div class="icon-btn" onclick="toggleMode()" aria-label="Toggle theme">
+      <i class="ti ti-moon" id="modeIcon"></i>
+    </div>
+  </div>
+
+  <div class="onboard-wrap">
+    <div class="onboard-card">
+
+      <button class="back-btn" onclick="prevStep()" id="backBtn" style="display:none" aria-label="Go back">
+        <i class="ti ti-arrow-left"></i>
+      </button>
+
+      <span class="onboard-logo">riff</span>
+      <div class="onboard-step-label" id="stepLabel">step 1 of 4</div>
+
+      <div class="step-dots">
+        <div class="step-dot active" id="dot0"></div>
+        <div class="step-dot" id="dot1"></div>
+        <div class="step-dot" id="dot2"></div>
+        <div class="step-dot" id="dot3"></div>
+      </div>
+
+      <!-- Step 1: Name -->
+      <div class="step active" id="step0">
+        <div class="onboard-title">What should we call you?</div>
+        <div class="onboard-sub">This is your display name — real or not, your choice.</div>
+        <div class="field-label">display name</div>
+        <input class="field-input" id="inputName" type="text" placeholder="e.g. Jordan" maxlength="40" />
+        <div class="field-label">username</div>
+        <input class="field-input" id="inputUsername" type="text" placeholder="@yourname" maxlength="30" />
+        <div class="field-hint">riff.app/@yourname — this is your invite link</div>
+        <button class="btn-full" onclick="nextStep()">Continue</button>
+      </div>
+
+      <!-- Step 2: Bio -->
+      <div class="step" id="step1">
+        <div class="onboard-title">Tell people a little.</div>
+        <div class="onboard-sub">A line or two. Where you are. What you're into. Keep it honest.</div>
+        <div class="field-label">bio</div>
+        <textarea class="field-input" id="inputBio" placeholder="e.g. Chicago. Big on real conversations." rows="3" maxlength="160" style="resize:none;line-height:1.6"></textarea>
+        <div class="field-hint">0 / 160</div>
+        <button class="btn-full" onclick="nextStep()">Continue</button>
+        <div class="skip-link"><a onclick="nextStep()">skip for now</a></div>
+      </div>
+
+      <!-- Step 3: Spotify -->
+      <div class="step" id="step2">
+        <div class="onboard-title">Connect your song.</div>
+        <div class="onboard-sub">Link to pick a song that represents you right now. 30-second preview, personally chosen.</div>
+        <button class="spotify-btn" onclick="mockSpotifyConnect()">
+          <i class="ti ti-brand-spotify" style="font-size:18px"></i>
+          Connect with Spotify
+        </button>
+        <div class="or-divider">or</div>
+        <div class="field-label">search a song manually</div>
+        <input class="field-input" id="inputSong" type="text" placeholder="Song or artist name..." />
+        <div id="songResult" style="display:none;background:var(--bg);border:0.5px solid var(--border);border-radius:12px;padding:12px 14px;margin-bottom:16px;display:none;align-items:center;gap:12px;">
+          <div style="width:40px;height:40px;border-radius:8px;background:#1a3a2a;flex-shrink:0;display:flex;align-items:center;justify-content:center;">
+            <i class="ti ti-music" style="color:#1DB954;font-size:16px"></i>
+          </div>
+          <div style="flex:1">
+            <div style="font-size:13px;font-weight:500;color:var(--text)" id="songResultTitle">Sh-Boom</div>
+            <div style="font-size:11px;color:var(--text2)" id="songResultArtist">The Chords</div>
+          </div>
+          <i class="ti ti-check" style="color:var(--accent);font-size:18px"></i>
+        </div>
+        <button class="btn-full" onclick="nextStep()">Continue</button>
+        <div class="skip-link"><a onclick="nextStep()">skip for now</a></div>
+      </div>
+
+      <!-- Step 4: Contacts -->
+      <div class="step" id="step3">
+        <div class="onboard-title">Find your people.</div>
+        <div class="onboard-sub">Import from your contacts or skip and invite friends manually. Your list is always private to you.</div>
+        <button class="btn-full" onclick="mockImport()" id="importBtn">
+          <span id="importLabel"><i class="ti ti-address-book" style="font-size:15px;margin-right:6px"></i>Import contacts</span>
+        </button>
+        <button class="btn-full secondary" onclick="goToApp()">Skip — I'll invite manually</button>
+        <div class="skip-link" style="margin-top:16px">
+          <a href="index.html">← back to home</a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+<script src="app.js"></script>
+<script>
+  let currentStep = 0;
+  const totalSteps = 4;
+
+  function updateDots() {
+    for (let i = 0; i < totalSteps; i++) {
+      const dot = document.getElementById('dot' + i);
+      dot.className = 'step-dot';
+      if (i < currentStep) dot.classList.add('done');
+      else if (i === currentStep) dot.classList.add('active');
+    }
+    document.getElementById('stepLabel').textContent = `step ${currentStep + 1} of ${totalSteps}`;
+    document.getElementById('backBtn').style.display = currentStep > 0 ? 'block' : 'none';
+  }
+
+  function nextStep() {
+    document.getElementById('step' + currentStep).classList.remove('active');
+    currentStep = Math.min(currentStep + 1, totalSteps - 1);
+    document.getElementById('step' + currentStep).classList.add('active');
+    updateDots();
+  }
+
+  function prevStep() {
+    document.getElementById('step' + currentStep).classList.remove('active');
+    currentStep = Math.max(currentStep - 1, 0);
+    document.getElementById('step' + currentStep).classList.add('active');
+    updateDots();
+  }
+
+  function mockSpotifyConnect() {
+    const btn = document.querySelector('.spotify-btn');
+    btn.innerHTML = '<i class="ti ti-check" style="font-size:16px"></i> Connected — Slow Burn picked';
+    btn.style.opacity = '0.7';
+    btn.style.cursor = 'default';
+  }
+
+  const songInput = document.getElementById('inputSong');
+  if (songInput) {
+    songInput.addEventListener('input', function() {
+      const result = document.getElementById('songResult');
+      if (this.value.length > 2) {
+        result.style.display = 'flex';
+      } else {
+        result.style.display = 'none';
+      }
+    });
+  }
+
+  function mockImport() {
+    const btn = document.getElementById('importBtn');
+    btn.innerHTML = '<i class="ti ti-check" style="font-size:15px;margin-right:6px"></i> 12 contacts found';
+    btn.style.opacity = '0.7';
+    setTimeout(() => { goToApp(); }, 900);
+  }
+
+  function goToApp() {
+    window.location.href = 'app.html';
+  }
+
+  const bioInput = document.getElementById('inputBio');
+  if (bioInput) {
+    bioInput.addEventListener('input', function() {
+      document.querySelector('#step1 .field-hint').textContent = `${this.value.length} / 160`;
+    });
+  }
+</script>
+</body>
+</html>

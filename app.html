@@ -1,0 +1,807 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Riff</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css" />
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    .app-shell {
+      max-width: 480px; margin: 0 auto;
+      min-height: 100vh; display: flex; flex-direction: column;
+      position: relative;
+    }
+
+    /* ── Topbar ── */
+    .topbar {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 18px 20px 12px;
+      background: var(--bg);
+      border-bottom: 0.5px solid var(--border);
+      position: sticky; top: 0; z-index: 20;
+      transition: background 0.3s;
+    }
+
+    .logo { font-family: 'DM Serif Display', serif; font-size: 22px; color: var(--text); }
+    .topbar-right { display: flex; gap: 8px; align-items: center; }
+
+    /* ── Pages ── */
+    .page { display: none; flex: 1; padding-bottom: 80px; overflow-y: auto; }
+    .page.active { display: block; }
+
+    /* ── Profile Page ── */
+    .profile-header { padding: 20px 20px 16px; }
+
+    .avatar-row { display: flex; align-items: flex-end; gap: 14px; margin-bottom: 14px; }
+
+    .avatar {
+      width: 82px; height: 82px; border-radius: 50%;
+      background: #2a2118; border: 2px solid var(--border2);
+      flex-shrink: 0; display: flex; align-items: center; justify-content: center;
+      font-family: 'DM Serif Display', serif; font-size: 30px; color: var(--accent);
+      cursor: pointer; transition: opacity 0.2s;
+    }
+    .avatar:hover { opacity: 0.85; }
+
+    .name-block { flex: 1; padding-bottom: 4px; }
+
+    .display-name {
+      font-family: 'DM Serif Display', serif; font-size: 24px; color: var(--text);
+      line-height: 1.1; margin-bottom: 4px;
+    }
+
+    .username { font-size: 13px; color: var(--text2); font-weight: 300; }
+
+    .bio {
+      font-size: 14px; color: var(--text2);
+      line-height: 1.65; margin-bottom: 18px; font-weight: 300;
+    }
+
+    .edit-btn {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 8px 18px; border-radius: 100px;
+      border: 0.5px solid var(--border2); background: transparent;
+      color: var(--text); font-family: 'DM Sans', sans-serif;
+      font-size: 13px; font-weight: 500; cursor: pointer;
+      transition: background 0.2s;
+    }
+    .edit-btn:hover { background: var(--pill); }
+
+    .section { padding: 0 20px; margin-bottom: 20px; }
+
+    .section-label {
+      font-size: 10px; font-weight: 500; letter-spacing: 1.2px;
+      text-transform: uppercase; color: var(--text3); margin-bottom: 10px;
+    }
+
+    /* ── Song Card ── */
+    .song-card {
+      background: var(--bg2); border: 0.5px solid var(--border);
+      border-radius: 16px; padding: 14px 16px;
+      display: flex; align-items: center; gap: 14px;
+      cursor: pointer; transition: background 0.2s; margin-bottom: 6px;
+    }
+    .song-card:hover { background: var(--bg3); }
+
+    .album-art {
+      width: 52px; height: 52px; border-radius: 8px;
+      background: #1a3a2a; flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+    }
+
+    .album-vinyl {
+      width: 30px; height: 30px; border-radius: 50%;
+      border: 2px solid rgba(0,0,0,0.35); background: rgba(0,0,0,0.25);
+      display: flex; align-items: center; justify-content: center;
+    }
+    .album-vinyl::after {
+      content: ''; width: 8px; height: 8px;
+      border-radius: 50%; background: rgba(0,0,0,0.45); display: block;
+    }
+
+    .song-info { flex: 1; min-width: 0; }
+
+    .song-title {
+      font-size: 14px; font-weight: 500; color: var(--text);
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-bottom: 2px;
+    }
+
+    .song-artist {
+      font-size: 12px; color: var(--text2);
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-bottom: 8px;
+    }
+
+    .progress-track { height: 2px; background: var(--border); border-radius: 1px; overflow: hidden; }
+
+    .progress-fill {
+      height: 100%; border-radius: 1px; background: var(--spotify);
+      width: 0%; transition: width 0.25s linear;
+    }
+
+    .song-right { display: flex; flex-direction: column; align-items: center; gap: 6px; flex-shrink: 0; }
+
+    .play-btn {
+      width: 32px; height: 32px; border-radius: 50%;
+      background: var(--spotify); display: flex; align-items: center; justify-content: center;
+      color: #000; font-size: 14px; cursor: pointer; transition: opacity 0.2s;
+    }
+    .play-btn:hover { opacity: 0.85; }
+
+    .song-duration { font-size: 10px; color: var(--text3); font-weight: 500; }
+    .song-note { font-size: 11px; color: var(--text3); font-style: italic; padding-left: 2px; margin-top: 4px; }
+
+    /* ── Moments Grid ── */
+    .moment-grid {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 6px;
+    }
+
+    .tile {
+      aspect-ratio: 1; border-radius: 14px;
+      background: var(--bg2); border: 0.5px solid var(--border);
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      gap: 6px; cursor: pointer; transition: background 0.2s;
+      color: var(--text3); position: relative; overflow: hidden;
+    }
+    .tile:hover { background: var(--bg3); }
+
+    .tile-label { font-size: 11px; color: var(--text3); letter-spacing: 0.2px; }
+
+    .tile-badge {
+      position: absolute; top: 8px; left: 8px;
+      background: rgba(0,0,0,0.5); border-radius: 6px;
+      padding: 3px 7px; font-size: 10px; font-weight: 500;
+      color: rgba(255,255,255,0.8); letter-spacing: 0.3px; display: none;
+    }
+
+    .tile.filled { background: var(--bg3); border-color: var(--border2); }
+    .tile.filled .tile-badge { display: block; }
+
+    /* ── Invite ── */
+    .invite-pill {
+      display: flex; align-items: center; gap: 12px;
+      background: var(--accent2); border: 0.5px solid rgba(200,184,154,0.2);
+      border-radius: 14px; padding: 12px 16px; cursor: pointer; transition: opacity 0.2s;
+    }
+    .invite-pill:hover { opacity: 0.8; }
+
+    .invite-icon {
+      width: 36px; height: 36px; border-radius: 50%;
+      background: var(--accent); display: flex; align-items: center; justify-content: center;
+      color: #0a0a0a; font-size: 15px; flex-shrink: 0;
+    }
+
+    .invite-text { flex: 1; }
+    .invite-label { font-size: 13px; font-weight: 500; color: var(--text); margin-bottom: 1px; }
+    .invite-sub { font-size: 11px; color: var(--text2); }
+
+    /* ── Contacts Page ── */
+    .contacts-search {
+      padding: 12px 20px 8px;
+      position: sticky; top: 61px; background: var(--bg);
+      border-bottom: 0.5px solid var(--border); z-index: 10;
+      transition: background 0.3s;
+    }
+
+    .search-input-wrap {
+      display: flex; align-items: center; gap: 10px;
+      background: var(--bg2); border: 0.5px solid var(--border);
+      border-radius: 12px; padding: 10px 14px;
+    }
+
+    .search-input-wrap input {
+      background: none; border: none; outline: none;
+      color: var(--text); font-family: 'DM Sans', sans-serif;
+      font-size: 14px; flex: 1;
+    }
+    .search-input-wrap input::placeholder { color: var(--text3); }
+
+    .contact-list { padding: 12px 20px; }
+
+    .contact-section-label {
+      font-size: 10px; letter-spacing: 1.2px; text-transform: uppercase;
+      color: var(--text3); font-weight: 500; margin: 12px 0 8px;
+    }
+
+    .contact-card {
+      display: flex; align-items: center; gap: 12px;
+      padding: 12px 14px; border-radius: 14px;
+      cursor: pointer; transition: background 0.2s; margin-bottom: 4px;
+    }
+    .contact-card:hover { background: var(--bg2); }
+
+    .contact-avatar {
+      width: 46px; height: 46px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'DM Serif Display', serif; font-size: 17px;
+      flex-shrink: 0; border: 1.5px solid var(--border2);
+    }
+
+    .contact-info { flex: 1; min-width: 0; }
+
+    .contact-name { font-size: 14px; font-weight: 500; color: var(--text); margin-bottom: 2px; }
+    .contact-handle { font-size: 12px; color: var(--text2); }
+    .contact-song { font-size: 11px; color: var(--text3); margin-top: 1px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+    .contact-right { display: flex; flex-direction: column; align-items: flex-end; gap: 4px; }
+
+    .mini-play {
+      width: 28px; height: 28px; border-radius: 50%;
+      background: var(--pill); border: 0.5px solid var(--border);
+      display: flex; align-items: center; justify-content: center;
+      color: var(--spotify); font-size: 12px; cursor: pointer;
+      transition: background 0.2s;
+    }
+    .mini-play:hover { background: var(--border); }
+
+    /* ── Messages Page ── */
+    .msg-list { padding: 12px 20px; }
+
+    .msg-card {
+      display: flex; align-items: center; gap: 12px;
+      padding: 12px 14px; border-radius: 14px;
+      cursor: pointer; transition: background 0.2s; margin-bottom: 4px;
+      position: relative;
+    }
+    .msg-card:hover { background: var(--bg2); }
+
+    .msg-avatar {
+      width: 50px; height: 50px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'DM Serif Display', serif; font-size: 18px;
+      flex-shrink: 0; border: 1.5px solid var(--border2);
+      position: relative;
+    }
+
+    .online-dot {
+      width: 10px; height: 10px; border-radius: 50%;
+      background: var(--spotify); border: 2px solid var(--bg);
+      position: absolute; bottom: 1px; right: 1px;
+    }
+
+    .msg-info { flex: 1; min-width: 0; }
+    .msg-name { font-size: 14px; font-weight: 500; color: var(--text); margin-bottom: 3px; }
+    .msg-preview { font-size: 12px; color: var(--text2); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+    .msg-meta { display: flex; flex-direction: column; align-items: flex-end; gap: 4px; }
+    .msg-time { font-size: 11px; color: var(--text3); }
+
+    .unread-badge {
+      width: 18px; height: 18px; border-radius: 50%;
+      background: var(--accent); color: #0a0a0a;
+      font-size: 10px; font-weight: 600;
+      display: flex; align-items: center; justify-content: center;
+    }
+
+    /* ── Chat View ── */
+    .chat-view {
+      display: none; flex-direction: column;
+      height: calc(100vh - 61px);
+      position: fixed; top: 61px; left: 50%; transform: translateX(-50%);
+      width: 100%; max-width: 480px;
+      background: var(--bg); z-index: 30;
+    }
+    .chat-view.open { display: flex; }
+
+    .chat-header {
+      display: flex; align-items: center; gap: 12px;
+      padding: 14px 20px; border-bottom: 0.5px solid var(--border);
+      background: var(--bg);
+    }
+
+    .chat-back {
+      width: 34px; height: 34px; border-radius: 50%;
+      background: var(--pill); border: 0.5px solid var(--border);
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer; color: var(--text2); font-size: 16px;
+      transition: background 0.2s; flex-shrink: 0;
+    }
+    .chat-back:hover { background: var(--border); }
+
+    .chat-avatar-sm {
+      width: 36px; height: 36px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'DM Serif Display', serif; font-size: 14px;
+      flex-shrink: 0; border: 1.5px solid var(--border2);
+    }
+
+    .chat-name { font-size: 15px; font-weight: 500; color: var(--text); flex: 1; }
+    .chat-sub { font-size: 11px; color: var(--text3); }
+
+    .chat-messages {
+      flex: 1; overflow-y: auto; padding: 20px;
+      display: flex; flex-direction: column; gap: 10px;
+    }
+
+    .bubble-wrap { display: flex; flex-direction: column; }
+    .bubble-wrap.mine { align-items: flex-end; }
+    .bubble-wrap.theirs { align-items: flex-start; }
+
+    .bubble {
+      max-width: 75%; padding: 10px 14px; border-radius: 18px;
+      font-size: 14px; line-height: 1.5;
+    }
+
+    .bubble-wrap.mine .bubble {
+      background: var(--accent); color: #0a0a0a;
+      border-bottom-right-radius: 4px;
+    }
+
+    .bubble-wrap.theirs .bubble {
+      background: var(--bg2); color: var(--text);
+      border: 0.5px solid var(--border);
+      border-bottom-left-radius: 4px;
+    }
+
+    .bubble-time { font-size: 10px; color: var(--text3); margin-top: 3px; padding: 0 2px; }
+
+    .chat-input-row {
+      display: flex; align-items: center; gap: 10px;
+      padding: 12px 16px; border-top: 0.5px solid var(--border);
+      background: var(--bg);
+    }
+
+    .chat-input {
+      flex: 1; background: var(--bg2); border: 0.5px solid var(--border);
+      border-radius: 100px; padding: 10px 16px;
+      color: var(--text); font-family: 'DM Sans', sans-serif; font-size: 14px;
+      outline: none; transition: border-color 0.2s;
+    }
+    .chat-input:focus { border-color: var(--accent); }
+    .chat-input::placeholder { color: var(--text3); }
+
+    .send-btn {
+      width: 38px; height: 38px; border-radius: 50%;
+      background: var(--accent); border: none; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      color: #0a0a0a; font-size: 16px; transition: opacity 0.2s; flex-shrink: 0;
+    }
+    .send-btn:hover { opacity: 0.88; }
+
+    /* ── Bottom Nav ── */
+    .bottom-nav {
+      position: fixed; bottom: 0; left: 50%; transform: translateX(-50%);
+      width: 100%; max-width: 480px;
+      background: var(--bg); border-top: 0.5px solid var(--border);
+      display: flex; align-items: center; justify-content: space-around;
+      padding: 10px 0 16px; z-index: 20; transition: background 0.3s;
+    }
+
+    .nav-item {
+      display: flex; flex-direction: column; align-items: center; gap: 3px;
+      color: var(--text3); font-size: 10px; letter-spacing: 0.5px;
+      cursor: pointer; transition: color 0.2s; font-weight: 500; min-width: 60px;
+    }
+    .nav-item i { font-size: 22px; }
+    .nav-item.active { color: var(--text); }
+    .nav-item:hover { color: var(--text2); }
+
+    /* ── Empty State ── */
+    .empty-state {
+      display: flex; flex-direction: column; align-items: center;
+      justify-content: center; padding: 60px 32px; text-align: center;
+      color: var(--text3);
+    }
+    .empty-state i { font-size: 40px; margin-bottom: 14px; opacity: 0.4; }
+    .empty-state p { font-size: 14px; line-height: 1.6; color: var(--text2); }
+
+    /* ── Toast ── */
+    .toast {
+      position: fixed; bottom: 90px; left: 50%; transform: translateX(-50%);
+      background: var(--text); color: var(--bg);
+      padding: 10px 20px; border-radius: 100px;
+      font-size: 13px; font-weight: 500;
+      opacity: 0; transition: opacity 0.25s;
+      pointer-events: none; white-space: nowrap; z-index: 100;
+    }
+    .toast.show { opacity: 1; }
+  </style>
+</head>
+<body>
+<div class="riff-root" id="root">
+
+  <div class="app-shell">
+
+    <!-- Topbar -->
+    <div class="topbar">
+      <span class="logo">riff</span>
+      <div class="topbar-right">
+        <div class="icon-btn" onclick="toggleMode()" aria-label="Toggle theme">
+          <i class="ti ti-moon" id="modeIcon"></i>
+        </div>
+        <div class="icon-btn" aria-label="Settings">
+          <i class="ti ti-settings"></i>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════════ PROFILE PAGE ══════════ -->
+    <div class="page active" id="page-profile">
+
+      <div class="profile-header">
+        <div class="avatar-row">
+          <div class="avatar" title="Change photo">A</div>
+          <div class="name-block">
+            <div class="display-name">Anastasia</div>
+            <div class="username">@anastasia</div>
+          </div>
+        </div>
+        <div class="bio">People first. Building with intention. STL</div>
+        <button class="edit-btn"><i class="ti ti-pencil" style="font-size:13px"></i> Edit profile</button>
+      </div>
+
+      <div class="section">
+        <div class="section-label">song right now</div>
+        <div class="song-card" onclick="togglePlay()">
+          <div class="album-art">
+            <div class="album-vinyl"></div>
+          </div>
+          <div class="song-info">
+            <div class="song-title">Sh-Boom</div>
+            <div class="song-artist">The Chords</div>
+            <div class="progress-track">
+              <div class="progress-fill" id="progressFill"></div>
+            </div>
+          </div>
+          <div class="song-right">
+            <div class="play-btn"><i class="ti ti-player-play" id="playIcon"></i></div>
+            <div class="song-duration" id="durLabel">0:30</div>
+          </div>
+        </div>
+        <div class="song-note">tap to preview</div>
+      </div>
+
+      <div class="section">
+        <div class="section-label">moments</div>
+        <div class="moment-grid">
+          <div class="tile filled" onclick="cycleTile(0)" id="tile0">
+            <div class="tile-badge" id="tbadge0">photo</div>
+            <i class="ti ti-photo" style="font-size:22px;color:var(--accent)"></i>
+            <div class="tile-label" style="color:var(--text2)">golden hour</div>
+          </div>
+          <div class="tile filled" onclick="cycleTile(1)" id="tile1">
+            <div class="tile-badge" id="tbadge1">video</div>
+            <i class="ti ti-video" style="font-size:22px;color:var(--accent)"></i>
+            <div class="tile-label" style="color:var(--text2)">city walk</div>
+          </div>
+          <div class="tile filled" onclick="cycleTile(2)" id="tile2">
+            <div class="tile-badge" id="tbadge2">photo</div>
+            <i class="ti ti-photo" style="font-size:22px;color:var(--accent)"></i>
+            <div class="tile-label" style="color:var(--text2)">morning coffee</div>
+          </div>
+          <div class="tile" onclick="cycleTile(3)" id="tile3">
+            <i class="ti ti-plus" style="font-size:22px"></i>
+            <div class="tile-label">add moment</div>
+          </div>
+        </div>
+        <div class="song-note">mix of photos & videos · tap a tile to change</div>
+      </div>
+
+      <div class="section">
+        <div class="invite-pill" onclick="copyInvite()">
+          <div class="invite-icon"><i class="ti ti-link"></i></div>
+          <div class="invite-text">
+            <div class="invite-label">invite someone to riff</div>
+            <div class="invite-sub" id="inviteSub">riff.app/@anastasia · tap to copy</div>
+          </div>
+          <i class="ti ti-copy" style="font-size:16px;color:var(--text3)"></i>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ══════════ CONTACTS PAGE ══════════ -->
+    <div class="page" id="page-contacts">
+
+      <div class="contacts-search">
+        <div class="search-input-wrap">
+          <i class="ti ti-search" style="color:var(--text3);font-size:16px"></i>
+          <input type="text" placeholder="Search contacts..." id="contactSearch" oninput="filterContacts()" />
+        </div>
+      </div>
+
+      <div class="contact-list" id="contactList">
+        <div class="contact-section-label">on riff</div>
+
+        <div class="contact-card" onclick="openChat('Maya','M','#3a2a1a')">
+          <div class="contact-avatar" style="background:#3a2a1a;color:#c8a87a">M</div>
+          <div class="contact-info">
+            <div class="contact-name">Maya</div>
+            <div class="contact-handle">@maya</div>
+            <div class="contact-song"><i class="ti ti-music" style="font-size:10px;margin-right:3px;color:var(--spotify)"></i>Sweet Caroline — Neil Diamond</div>
+          </div>
+          <div class="contact-right">
+            <div class="mini-play"><i class="ti ti-player-play"></i></div>
+          </div>
+        </div>
+
+        <div class="contact-card" onclick="openChat('Derek','D','#1a2a3a')">
+          <div class="contact-avatar" style="background:#1a2a3a;color:#7ab0c8">D</div>
+          <div class="contact-info">
+            <div class="contact-name">Derek</div>
+            <div class="contact-handle">@derek</div>
+            <div class="contact-song"><i class="ti ti-music" style="font-size:10px;margin-right:3px;color:var(--spotify)"></i>You Send Me - Sam Cooke</div>
+          </div>
+          <div class="contact-right">
+            <div class="mini-play"><i class="ti ti-player-play"></i></div>
+          </div>
+        </div>
+
+        <div class="contact-card" onclick="openChat('Sarah','S','#2a1a3a')">
+          <div class="contact-avatar" style="background:#2a1a3a;color:#b07ac8">P</div>
+          <div class="contact-info">
+            <div class="contact-name">Sarah</div>
+            <div class="contact-handle">@sarah</div>
+            <div class="contact-song"><i class="ti ti-music" style="font-size:10px;margin-right:3px;color:var(--spotify)"></i>Here Comes The Sun - The Beatles</div>
+          </div>
+          <div class="contact-right">
+            <div class="mini-play"><i class="ti ti-player-play"></i></div>
+          </div>
+        </div>
+
+        <div class="contact-card" onclick="openChat('Sam','S','#1a3a2a')">
+          <div class="contact-avatar" style="background:#1a3a2a;color:#7ac8a0">S</div>
+          <div class="contact-info">
+            <div class="contact-name">Sam</div>
+            <div class="contact-handle">@sam</div>
+            <div class="contact-song"><i class="ti ti-music" style="font-size:10px;margin-right:3px;color:var(--spotify)"></i>Brown Eyed Girl - Van Morrison</div>
+          </div>
+          <div class="contact-right">
+            <div class="mini-play"><i class="ti ti-player-play"></i></div>
+          </div>
+        </div>
+
+        <div class="contact-section-label" style="margin-top:20px">invite to riff</div>
+
+        <div class="contact-card">
+          <div class="contact-avatar" style="background:var(--bg2);color:var(--text3)">J</div>
+          <div class="contact-info">
+            <div class="contact-name" style="color:var(--text2)">Jamie</div>
+            <div class="contact-handle">not on riff yet</div>
+          </div>
+          <div class="contact-right">
+            <button class="edit-btn" style="padding:6px 14px;font-size:12px" onclick="showToast('Invite link copied!')">Invite</button>
+          </div>
+        </div>
+
+        <div class="contact-card">
+          <div class="contact-avatar" style="background:var(--bg2);color:var(--text3)">R</div>
+          <div class="contact-info">
+            <div class="contact-name" style="color:var(--text2)">Riley</div>
+            <div class="contact-handle">not on riff yet</div>
+          </div>
+          <div class="contact-right">
+            <button class="edit-btn" style="padding:6px 14px;font-size:12px" onclick="showToast('Invite link copied!')">Invite</button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ══════════ MESSAGES PAGE ══════════ -->
+    <div class="page" id="page-messages">
+      <div class="msg-list">
+
+        <div class="msg-card" onclick="openChat('Maya','M','#3a2a1a')">
+          <div class="msg-avatar" style="background:#3a2a1a;color:#c8a87a">
+            M<div class="online-dot"></div>
+          </div>
+          <div class="msg-info">
+            <div class="msg-name">Maya</div>
+            <div class="msg-preview">that song you picked is so you 😭</div>
+          </div>
+          <div class="msg-meta">
+            <div class="msg-time">2m</div>
+            <div class="unread-badge">2</div>
+          </div>
+        </div>
+
+        <div class="msg-card" onclick="openChat('Derek','D','#1a2a3a')">
+          <div class="msg-avatar" style="background:#1a2a3a;color:#7ab0c8">D</div>
+          <div class="msg-info">
+            <div class="msg-name">Derek</div>
+            <div class="msg-preview">we should catch up soon</div>
+          </div>
+          <div class="msg-meta">
+            <div class="msg-time">1h</div>
+          </div>
+        </div>
+
+        <div class="msg-card" onclick="openChat('Sarah','S','#2a1a3a')">
+          <div class="msg-avatar" style="background:#2a1a3a;color:#b07ac8">P</div>
+          <div class="msg-info">
+            <div class="msg-name">Sarah</div>
+            <div class="msg-preview">loved your morning coffee photo</div>
+          </div>
+          <div class="msg-meta">
+            <div class="msg-time">3h</div>
+            <div class="unread-badge">1</div>
+          </div>
+        </div>
+
+        <div class="msg-card" onclick="openChat('Sam','S','#1a3a2a')">
+          <div class="msg-avatar" style="background:#1a3a2a;color:#7ac8a0">S</div>
+          <div class="msg-info">
+            <div class="msg-name">Sam</div>
+            <div class="msg-preview">You: sounds good!</div>
+          </div>
+          <div class="msg-meta">
+            <div class="msg-time">yesterday</div>
+          </div>
+        </div>
+
+        <div class="empty-state" style="padding:40px 32px 0">
+          <p style="font-size:13px">Messages are private.</p>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ══════════ CHAT VIEW ══════════ -->
+    <div class="chat-view" id="chatView">
+      <div class="chat-header">
+        <div class="chat-back" onclick="closeChat()"><i class="ti ti-arrow-left"></i></div>
+        <div class="chat-avatar-sm" id="chatAvatarSm" style="background:#3a2a1a;color:#c8a87a">M</div>
+        <div>
+          <div class="chat-name" id="chatName">Maya</div>
+
+        </div>
+      </div>
+      <div class="chat-messages" id="chatMessages">
+        <div class="bubble-wrap theirs">
+          <div class="bubble">that song you picked is so you 😭</div>
+          <div class="bubble-time">2 min ago</div>
+        </div>
+        <div class="bubble-wrap theirs">
+          <div class="bubble">slow burn energy all the way</div>
+          <div class="bubble-time">2 min ago</div>
+        </div>
+        <div class="bubble-wrap mine">
+          <div class="bubble">ha right?? it just felt accurate this week</div>
+          <div class="bubble-time">just now</div>
+        </div>
+      </div>
+      <div class="chat-input-row">
+        <input class="chat-input" id="chatInput" type="text" placeholder="Message..." onkeydown="sendOnEnter(event)" />
+        <button class="send-btn" onclick="sendMessage()"><i class="ti ti-send"></i></button>
+      </div>
+    </div>
+
+    <!-- Bottom Nav -->
+    <div class="bottom-nav">
+      <div class="nav-item" onclick="switchPage('contacts', this)">
+        <i class="ti ti-address-book"></i>
+        <span>contacts</span>
+      </div>
+      <div class="nav-item active" onclick="switchPage('profile', this)">
+        <i class="ti ti-user"></i>
+        <span>profile</span>
+      </div>
+      <div class="nav-item" onclick="switchPage('messages', this)">
+        <i class="ti ti-message-circle"></i>
+        <span>messages</span>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+</div>
+<script src="app.js"></script>
+<script>
+  // ── Page switching ──
+  function switchPage(name, el) {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.getElementById('page-' + name).classList.add('active');
+    document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+    el.classList.add('active');
+  }
+
+  // ── Song preview ──
+  let isPlaying = false, timer = null, elapsed = 0;
+  const DURATION = 30;
+
+  function togglePlay() {
+    if (isPlaying) {
+      clearInterval(timer); isPlaying = false;
+      document.getElementById('playIcon').className = 'ti ti-player-play';
+    } else {
+      if (elapsed >= DURATION) elapsed = 0;
+      isPlaying = true;
+      document.getElementById('playIcon').className = 'ti ti-player-pause';
+      timer = setInterval(() => {
+        elapsed += 0.25;
+        const pct = Math.min((elapsed / DURATION) * 100, 100);
+        document.getElementById('progressFill').style.width = pct + '%';
+        const rem = Math.max(0, Math.ceil(DURATION - elapsed));
+        document.getElementById('durLabel').textContent = '0:' + String(rem).padStart(2, '0');
+        if (elapsed >= DURATION) {
+          clearInterval(timer); isPlaying = false; elapsed = 0;
+          document.getElementById('playIcon').className = 'ti ti-player-play';
+          document.getElementById('progressFill').style.width = '0%';
+          document.getElementById('durLabel').textContent = '0:30';
+        }
+      }, 250);
+    }
+  }
+
+  // ── Tiles ──
+  const tileStates = ['photo', 'video', 'photo', 'empty'];
+  const tileNames = ['golden hour', 'city walk', 'morning coffee', ''];
+
+  function cycleTile(i) {
+    const tile = document.getElementById('tile' + i);
+    const s = tileStates[i];
+    if (s === 'empty') {
+      tileStates[i] = 'photo'; tileNames[i] = 'new moment';
+      tile.className = 'tile filled';
+      tile.innerHTML = `<div class="tile-badge" id="tbadge${i}">photo</div><i class="ti ti-photo" style="font-size:22px;color:var(--accent)"></i><div class="tile-label" style="color:var(--text2)">new moment</div>`;
+    } else if (s === 'photo') {
+      tileStates[i] = 'video';
+      tile.innerHTML = `<div class="tile-badge" id="tbadge${i}">video</div><i class="ti ti-video" style="font-size:22px;color:var(--accent)"></i><div class="tile-label" style="color:var(--text2)">${tileNames[i]}</div>`;
+    } else {
+      tileStates[i] = 'empty';
+      tile.className = 'tile';
+      tile.innerHTML = `<i class="ti ti-plus" style="font-size:22px"></i><div class="tile-label">add moment</div>`;
+    }
+    tile.onclick = function() { cycleTile(i); };
+  }
+
+  // ── Invite copy ──
+  function copyInvite() {
+    const sub = document.getElementById('inviteSub');
+    const orig = sub.textContent;
+    sub.textContent = 'link copied!';
+    showToast('Invite link copied');
+    setTimeout(() => { sub.textContent = orig; }, 1800);
+  }
+
+  // ── Contacts search ──
+  function filterContacts() {
+    const q = document.getElementById('contactSearch').value.toLowerCase();
+    document.querySelectorAll('.contact-card').forEach(c => {
+      c.style.display = c.textContent.toLowerCase().includes(q) ? '' : 'none';
+    });
+  }
+
+  // ── Chat ──
+  function openChat(name, initial, bg) {
+    const view = document.getElementById('chatView');
+    document.getElementById('chatName').textContent = name;
+    document.getElementById('chatAvatarSm').textContent = initial;
+    document.getElementById('chatAvatarSm').style.background = bg;
+    view.classList.add('open');
+  }
+
+  function closeChat() {
+    document.getElementById('chatView').classList.remove('open');
+  }
+
+  function sendMessage() {
+    const input = document.getElementById('chatInput');
+    const text = input.value.trim();
+    if (!text) return;
+    const msgs = document.getElementById('chatMessages');
+    const wrap = document.createElement('div');
+    wrap.className = 'bubble-wrap mine';
+    wrap.innerHTML = `<div class="bubble">${text}</div><div class="bubble-time">just now</div>`;
+    msgs.appendChild(wrap);
+    msgs.scrollTop = msgs.scrollHeight;
+    input.value = '';
+  }
+
+  function sendOnEnter(e) { if (e.key === 'Enter') sendMessage(); }
+
+  // ── Toast ──
+  function showToast(msg) {
+    const t = document.getElementById('toast');
+    t.textContent = msg; t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 2000);
+  }
+</script>
+</body>
+</html>

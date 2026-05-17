@@ -1,0 +1,71 @@
+/* ═══════════════════════════════════════
+   RIFF — 
+   style.css
+═══════════════════════════════════════ */
+
+/* ── Fonts ── */
+@import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap');
+
+/* ── Tokens ── */
+:root {
+  --bg:      #0a0a0a;
+  --bg2:     #141414;
+  --bg3:     #1c1c1c;
+  --border:  rgba(255,255,255,0.08);
+  --border2: rgba(255,255,255,0.14);
+  --text:    #f0ede8;
+  --text2:   rgba(240,237,232,0.55);
+  --text3:   rgba(240,237,232,0.3);
+  --accent:  #c8b89a;
+  --accent2: rgba(200,184,154,0.12);
+  --spotify: #1DB954;
+  --pill:    rgba(255,255,255,0.06);
+}
+
+/* ── Day Mode ── */
+.day {
+  --bg:      #f5f2ed;
+  --bg2:     #ece8e1;
+  --bg3:     #ffffff;
+  --border:  rgba(0,0,0,0.08);
+  --border2: rgba(0,0,0,0.14);
+  --text:    #1a1814;
+  --text2:   rgba(26,24,20,0.55);
+  --text3:   rgba(26,24,20,0.3);
+  --accent:  #8b6f47;
+  --accent2: rgba(139,111,71,0.08);
+  --pill:    rgba(0,0,0,0.05);
+}
+
+/* ── Reset ── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body {
+  height: 100%;
+  font-family: 'DM Sans', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  transition: background 0.3s, color 0.3s;
+  -webkit-font-smoothing: antialiased;
+}
+
+a { color: inherit; }
+button { font-family: inherit; }
+input, textarea { font-family: inherit; color: inherit; }
+
+/* ── Shared Components ── */
+.riff-root {
+  background: var(--bg);
+  min-height: 100vh;
+  transition: background 0.3s;
+}
+
+.icon-btn {
+  width: 36px; height: 36px; border-radius: 50%;
+  background: var(--pill); border: 0.5px solid var(--border);
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; color: var(--text2); font-size: 17px;
+  transition: background 0.2s, color 0.2s;
+}
+
+.icon-btn:hover { background: var(--border); color: var(--text); }
