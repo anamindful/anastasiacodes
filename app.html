@@ -768,14 +768,49 @@
     });
   }
 
-  // ── Chat ──
-  function openChat(name, initial, bg) {
-    const view = document.getElementById('chatView');
-    document.getElementById('chatName').textContent = name;
-    document.getElementById('chatAvatarSm').textContent = initial;
-    document.getElementById('chatAvatarSm').style.background = bg;
-    view.classList.add('open');
-  }
+  // ── Chat ── For real users later, chatData will be replaced by an API call that fetches messages by conversation ID.
+const chatData = {
+  'Maya': [
+    { from: 'theirs', text: 'that song you picked is so you 😭', time: '2 min ago' },
+    { from: 'theirs', text: 'slow burn energy all the way', time: '2 min ago' },
+    { from: 'mine', text: 'ha right?? it just felt accurate this week', time: 'just now' }
+  ],
+  'Derek': [
+    { from: 'theirs', text: 'we should catch up soon', time: '1 hour ago' },
+    { from: 'mine', text: 'yes — been too long', time: '58 min ago' },
+    { from: 'theirs', text: 'let\'s actually make it happen this time', time: '55 min ago' }
+  ],
+  'Sarah': [
+    { from: 'theirs', text: 'loved your morning coffee photo', time: '3 hours ago' },
+    { from: 'mine', text: 'haha it was too good not to share', time: '3 hours ago' }
+  ],
+  'Sam': [
+    { from: 'mine', text: 'free this weekend?', time: 'yesterday' },
+    { from: 'theirs', text: 'yes! saturday works', time: 'yesterday' },
+    { from: 'mine', text: 'sounds good!', time: 'yesterday' }
+  ]
+};
+
+function openChat(name, initial, bg) {
+  const view = document.getElementById('chatView');
+  document.getElementById('chatName').textContent = name;
+  document.getElementById('chatAvatarSm').textContent = initial;
+  document.getElementById('chatAvatarSm').style.background = bg;
+
+  const msgs = document.getElementById('chatMessages');
+  msgs.innerHTML = '';
+
+  const conversation = chatData[name] || [];
+  conversation.forEach(msg => {
+    const wrap = document.createElement('div');
+    wrap.className = 'bubble-wrap ' + msg.from;
+    wrap.innerHTML = `<div class="bubble">${msg.text}</div><div class="bubble-time">${msg.time}</div>`;
+    msgs.appendChild(wrap);
+  });
+
+  msgs.scrollTop = msgs.scrollHeight;
+  view.classList.add('open');
+}
 
   function closeChat() {
     document.getElementById('chatView').classList.remove('open');
