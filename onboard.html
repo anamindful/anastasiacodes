@@ -3,7 +3,363 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Riff — Get started</title>
+  <title>Riff — Waitlist</title>
+  <style>
+
+    /* ── Tokens ── */
+    :root {
+      --bg:      #0a0a0a;
+      --bg2:     #141414;
+      --bg3:     #1c1c1c;
+      --border:  rgba(255,255,255,0.08);
+      --border2: rgba(255,255,255,0.14);
+      --text:    #f0ede8;
+      --text2:   rgba(240,237,232,0.55);
+      --text3:   rgba(240,237,232,0.3);
+      --accent:  #c8b89a;
+      --accent2: rgba(200,184,154,0.12);
+      --pill:    rgba(255,255,255,0.06);
+    }
+
+    /* ── Day mode ── */
+    body.day {
+      --bg:      #f5f2ed;
+      --bg2:     #ece8e1;
+      --bg3:     #ffffff;
+      --border:  rgba(0,0,0,0.08);
+      --border2: rgba(0,0,0,0.14);
+      --text:    #1a1814;
+      --text2:   rgba(26,24,20,0.55);
+      --text3:   rgba(26,24,20,0.3);
+      --accent:  #8b6f47;
+      --accent2: rgba(139,111,71,0.08);
+      --pill:    rgba(0,0,0,0.05);
+    }
+
+    /* ── Reset ── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      transition: background 0.3s, color 0.3s;
+    }
+
+    /* ── Theme toggle ── */
+    .theme-toggle {
+      position: fixed; top: 20px; right: 20px; z-index: 10;
+      background: var(--bg2); border: 0.5px solid var(--border2);
+      border-radius: 50%; width: 36px; height: 36px;
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer; color: var(--text3); font-size: 16px;
+      transition: color 0.2s, background 0.2s;
+    }
+    .theme-toggle:hover { color: var(--text); }
+
+    /* ── Card ── */
+    .card {
+      position: relative; z-index: 1;
+      background: var(--bg2);
+      border: 0.5px solid var(--border);
+      border-radius: 28px;
+      padding: 44px 40px;
+      width: 100%; max-width: 420px;
+      box-shadow: 0 4px 40px rgba(0,0,0,0.3);
+    }
+
+    /* ── Eyebrow pill ── */
+    .eyebrow {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: var(--pill); border: 0.5px solid var(--border2);
+      border-radius: 100px; padding: 5px 12px;
+      font-size: 10px; letter-spacing: 1.4px; text-transform: uppercase;
+      color: var(--text3); font-weight: 500;
+      margin-bottom: 24px;
+    }
+    .eyebrow-dot {
+      width: 6px; height: 6px; border-radius: 50%;
+      background: var(--accent);
+      animation: pulse 2s ease-in-out infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50%       { opacity: 0.5; transform: scale(0.8); }
+    }
+
+    /* ── Logo ── */
+    .logo {
+      font-family: 'DM Serif Display', serif;
+      font-size: 28px; color: var(--text);
+      text-decoration: none; display: block;
+      margin-bottom: 14px;
+    }
+
+    /* ── Heading ── */
+    h1 {
+      font-family: 'DM Serif Display', serif;
+      font-size: 30px; line-height: 1.15;
+      color: var(--text); margin-bottom: 10px;
+    }
+    h1 em {
+      font-style: italic; color: var(--accent);
+    }
+
+    /* ── Subtext ── */
+    .sub {
+      font-size: 13px; color: var(--text2);
+      line-height: 1.65; font-weight: 300;
+      margin-bottom: 32px;
+    }
+
+    /* ── Form fields ── */
+    .field-label {
+      font-size: 10px; letter-spacing: 1px; text-transform: uppercase;
+      color: var(--text3); font-weight: 500; margin-bottom: 7px;
+      display: block;
+    }
+
+    .field-input {
+      width: 100%; padding: 13px 16px;
+      background: var(--bg); border: 0.5px solid var(--border2);
+      border-radius: 12px; color: var(--text);
+      font-family: 'DM Sans', sans-serif; font-size: 14px;
+      outline: none; margin-bottom: 14px;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .field-input:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px var(--accent2);
+    }
+    .field-input::placeholder { color: var(--text3); }
+    .field-input[aria-invalid="true"] { border-color: #e05c5c; }
+
+    /* ── Field error ── */
+    .field-error {
+      font-size: 11px; color: #e05c5c;
+      margin-top: -10px; margin-bottom: 12px;
+      min-height: 16px; display: block;
+    }
+
+    /* ── Submit button ── */
+    .btn-submit {
+      width: 100%; padding: 14px;
+      background: var(--accent); color: var(--bg);
+      border: none; border-radius: 100px;
+      font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 500;
+      cursor: pointer; transition: opacity 0.2s, transform 0.1s;
+      margin-top: 6px; display: flex; align-items: center; justify-content: center; gap: 8px;
+    }
+    .btn-submit:hover:not(:disabled) { opacity: 0.88; }
+    .btn-submit:active:not(:disabled) { transform: scale(0.98); }
+    .btn-submit:disabled { opacity: 0.5; cursor: not-allowed; }
+
+    /* ── Spinner ── */
+    .spinner {
+      width: 16px; height: 16px;
+      border: 2px solid rgba(0,0,0,0.2);
+      border-top-color: var(--bg);
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+      display: none;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ── Success state ── */
+    .success-state {
+      display: none;
+      text-align: center;
+      padding: 16px 0 8px;
+    }
+    .success-icon {
+      width: 52px; height: 52px; border-radius: 50%;
+      background: var(--pill);
+      border: 0.5px solid var(--border2);
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 20px;
+      font-size: 22px; color: var(--text);
+      animation: pop 0.4s cubic-bezier(0.34,1.56,0.64,1);
+    }
+    @keyframes pop {
+      from { transform: scale(0.6); opacity: 0; }
+      to   { transform: scale(1);   opacity: 1; }
+    }
+    .success-title {
+      font-family: 'DM Serif Display', serif;
+      font-size: 22px; color: var(--text);
+      margin-bottom: 8px;
+    }
+    .success-sub {
+      font-size: 13px; color: var(--text2);
+      line-height: 1.6; font-weight: 300;
+    }
+
+    /* ── Form-level error banner ── */
+    .form-error {
+      background: rgba(224,92,92,0.08);
+      border: 0.5px solid rgba(224,92,92,0.3);
+      border-radius: 10px; padding: 11px 14px;
+      font-size: 12px; color: #e05c5c;
+      margin-bottom: 16px; display: none;
+      align-items: center; gap: 8px;
+    }
+
+    /* ── Privacy note ── */
+    .privacy-note {
+      text-align: center; margin-top: 16px;
+      font-size: 11px; color: var(--text3);
+    }
+    .privacy-note a { color: var(--text2); text-decoration: none; }
+    .privacy-note a:hover { color: var(--text); }
+
+    /* ── Divider ── */
+    .divider {
+      height: 0.5px; background: var(--border);
+      margin: 28px 0;
+    }
+
+    /* ── Social proof ── */
+    .social-proof {
+      display: flex; align-items: center; gap: 10px;
+    }
+    .avatars { display: flex; }
+    .avatar {
+      width: 24px; height: 24px; border-radius: 50%;
+      border: 1.5px solid var(--bg2);
+      margin-right: -6px;
+      font-size: 10px; font-weight: 500;
+      display: flex; align-items: center; justify-content: center;
+      color: #0a0a0a;
+    }
+    .social-text {
+      font-size: 12px; color: var(--text3); line-height: 1.4;
+    }
+    .social-text strong { color: var(--text2); font-weight: 500; }
+
+  </style>
+</head>
+<body>
+
+  <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme">
+    <i class="ti ti-moon" id="themeIcon"></i>
+  </button>
+
+  <div class="card">
+
+    <a href="riff.html" class="logo">riff</a>
+
+    <div class="eyebrow">
+      <div class="eyebrow-dot"></div>
+      Early access
+    </div>
+
+    <h1>Real talk,<br /><em>real people.</em></h1>
+    <p class="sub">
+      Riff is a place for honest conversation. No algorithm, no performance —
+      just you and the people worth talking to. Drop your email and we'll let
+      you in when a spot opens.
+    </p>
+
+    <!-- Form-level error banner -->
+    <div class="form-error" id="formError" data-fs-error>
+      <i class="ti ti-alert-circle"></i>
+      <span></span>
+    </div>
+
+    <!-- Waitlist form -->
+    <form id="waitlist-form" novalidate>
+
+      <label class="field-label" for="inputName">your name</label>
+      <input
+        class="field-input"
+        id="inputName"
+        name="name"
+        type="text"
+        placeholder="First Last"
+        autocomplete="given-name"
+        maxlength="100"
+        data-fs-field
+      />
+      <span class="field-error" data-fs-error="name"></span>
+
+      <label class="field-label" for="inputEmail">email address</label>
+      <input
+        class="field-input"
+        id="inputEmail"
+        name="email"
+        type="email"
+        placeholder="you@example.com"
+        autocomplete="email"
+        required
+        data-fs-field
+      />
+      <span class="field-error" data-fs-error="email"></span>
+
+      <button class="btn-submit" type="submit" data-fs-submit-btn>
+        <span class="spinner" id="spinner"></span>
+        <span id="btnLabel">Join the waitlist</span>
+        <i class="ti ti-arrow-right" id="btnArrow" style="font-size:15px"></i>
+      </button>
+
+    </form>
+
+
+
+
+  </div>
+
+  <script>
+    window.formspree = window.formspree || function () {
+      (formspree.q = formspree.q || []).push(arguments);
+    };
+
+    formspree('initForm', {
+      formElement: '#waitlist-form',
+      formId: 'mgobwyoj'
+    });
+
+    // Spinner toggle — watches submit button disabled state
+    const btn      = document.querySelector('[data-fs-submit-btn]');
+    const spinner  = document.getElementById('spinner');
+    const btnLabel = document.getElementById('btnLabel');
+    const btnArrow = document.getElementById('btnArrow');
+
+    const observer = new MutationObserver(() => {
+      const disabled = btn.disabled;
+      spinner.style.display = disabled ? 'block' : 'none';
+      btnLabel.textContent   = disabled ? 'Joining…'         : 'Join the waitlist';
+      btnArrow.style.display = disabled ? 'none'             : 'inline';
+    });
+    observer.observe(btn, { attributes: true, attributeFilter: ['disabled'] });
+
+    // Theme toggle — toggles .day class on body
+    const themeIcon = document.getElementById('themeIcon');
+    let dark = true;
+
+    function toggleTheme() {
+      dark = !dark;
+      document.body.classList.toggle('day', !dark);
+      themeIcon.className = dark ? 'ti ti-moon' : 'ti ti-sun';
+    }
+  </script>
+  <script src="https://unpkg.com/@formspree/ajax@1" defer></script>
+
+</body>
+</html>
+
+
+  <!-- future onboarding code <!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Riff — Waitlist</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet" />
@@ -161,7 +517,7 @@
         <div class="step-dot" id="dot3"></div>
       </div>
 
-      <!-- Step 1: Name -->
+      <!-- Step 1: Name --
       <div class="step active" id="step0">
         <div class="onboard-title">What should we call you?</div>
         <div class="onboard-sub">This is your display name — real or not, your choice.</div>
@@ -173,7 +529,7 @@
         <button class="btn-full" onclick="nextStep()">Continue</button>
       </div>
 
-      <!-- Step 2: Bio -->
+      <!-- Step 2: Bio --
       <div class="step" id="step1">
         <div class="onboard-title">Tell people a little.</div>
         <div class="onboard-sub">A line or two. Where you are. What you're into. Keep it honest.</div>
@@ -184,7 +540,7 @@
         <div class="skip-link"><a onclick="nextStep()">skip for now</a></div>
       </div>
 
-      <!-- Step 3: Spotify -->
+      <!-- Step 3: Spotify --
       <div class="step" id="step2">
         <div class="onboard-title">Connect your song.</div>
         <div class="onboard-sub">Link to pick a song that represents you right now. 30-second preview, personally chosen.</div>
@@ -209,7 +565,7 @@
         <div class="skip-link"><a onclick="nextStep()">skip for now</a></div>
       </div>
 
-      <!-- Step 4: Contacts -->
+      <!-- Step 4: Contacts --
       <div class="step" id="step3">
         <div class="onboard-title">Find your people.</div>
         <div class="onboard-sub">Import from your contacts or skip and invite friends manually. Your list is always private to you.</div>
@@ -295,3 +651,4 @@
 </script>
 </body>
 </html>
+-->
